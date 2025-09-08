@@ -1,12 +1,13 @@
 import { Link } from "react-router-dom";
 import { Facebook, Twitter, Instagram, Mail, Phone } from "lucide-react";
 import { useState, useEffect } from "react";
+import { API_URL } from "../config";
 
 const Footer = () => {
   const [settings, setSettings] = useState(null);
 
   useEffect(() => {
-    fetch("http://localhost:5000/api/settings")
+    fetch(`${API_URL}/api/settings`)
       .then((res) => res.json())
       .then((data) => {
         if (data.success && data.settings) {

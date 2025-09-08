@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
+import { API_URL } from "../config"; // 
 
 const BusinessFormation = () => {
   const { t } = useTranslation();
@@ -26,7 +27,7 @@ const BusinessFormation = () => {
   const handleSubmit = async (e) => {
   e.preventDefault();
   try {
-    const res = await fetch("http://localhost:5000/api/business", {
+    const res = await fetch(`${API_URL}/api/business`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

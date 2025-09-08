@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { Menu, X } from "lucide-react";
+import { API_URL } from "../config"; // Adjust the path as necessary
 
 const Navbar = () => {
   const { t, i18n } = useTranslation();
@@ -20,7 +21,7 @@ const Navbar = () => {
   };
 
   useEffect(() => {
-    fetch("http://localhost:5000/api/settings")
+    fetch(`${API_URL}/api/settings`)
       .then((res) => res.json())
       .then((data) => {
         if (data.success && data.settings) {

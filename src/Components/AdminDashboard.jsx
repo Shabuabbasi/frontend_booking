@@ -24,6 +24,7 @@ import {
 import Settings from "../Components/Settings";
 import { Settings as SettingsIcon } from "lucide-react";
 import Chatbot from "../Components/Chatbot";
+import { API_URL } from "../config";
 
 // CSV Export Helper
 const exportCSV = (data, filename) => {
@@ -84,7 +85,7 @@ const AdminDashboard = () => {
 
   const [bookings, setBookings] = useState([]);
   useEffect(() => {
-    fetch("http://localhost:5000/api/leads")
+    fetch(`${API_URL}/api/leads`)
       .then((res) => res.json())
       .then((data) => setBookings(data))
       .catch((err) => console.error("Error fetching users:", err));
@@ -92,7 +93,7 @@ const AdminDashboard = () => {
 
   const [Leads, setLeads] = useState([]);
   useEffect(() => {
-    fetch("http://localhost:5000/api/business")
+    fetch(`${API_URL}/api/business`)
       .then((res) => res.json())
       .then((data) => setLeads(data))
       .catch((err) => console.error("Error fetching users:", err));

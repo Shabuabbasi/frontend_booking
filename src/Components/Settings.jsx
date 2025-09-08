@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { API_URL } from "../config"
 
 const Settings = () => {
   const [settings, setSettings] = useState({
@@ -48,7 +49,7 @@ const Settings = () => {
 // }, []);
 
 
-const API_URL = import.meta.env.VITE_API_URL;
+
 
 useEffect(() => {
   fetch(`${API_URL}/api/settings`)
@@ -65,13 +66,13 @@ useEffect(() => {
       });
     })
     .catch((err) => console.error("Error fetching settings:", err));
-}, [ API_URL]);
+}, [  ]);
 
 
 
   // Save updated settings
  const handleSave = async () => {
-  await fetch("http://localhost:5000/api/settings", {
+  await fetch(`${API_URL}/api/settings`, {
     method: "PUT",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({

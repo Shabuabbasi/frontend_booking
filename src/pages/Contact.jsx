@@ -2,6 +2,7 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { useTranslation } from "react-i18next";
 import { useEffect } from "react";
+import { API_URL } from "../config"
 
 const Contact = () => {
   const { t } = useTranslation();
@@ -25,7 +26,7 @@ const Contact = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await fetch("http://localhost:5000/api/contact", {
+      const res = await fetch(`${API_URL}/api/contact`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
@@ -46,7 +47,7 @@ const Contact = () => {
       const [settings, setSettings] = useState(null);
   
     useEffect(() => {
-      fetch("http://localhost:5000/api/settings")
+      fetch(`${API_URL}/api/settings`)
         .then((res) => res.json())
         .then((data) => {
           if (data.success && data.settings) {

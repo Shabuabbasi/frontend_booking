@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
+import { API_URL } from "../config"; //
 
 
 const ProServices = () => {
@@ -27,7 +28,7 @@ const ProServices = () => {
   const handleSubmit = async (e) => {
   e.preventDefault();
   try {
-    const res = await fetch("http://localhost:5000/api/leads", {
+    const res = await fetch(`${API_URL}/api/leads`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
