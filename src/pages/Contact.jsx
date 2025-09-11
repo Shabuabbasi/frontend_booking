@@ -1,19 +1,25 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { useTranslation } from "react-i18next";
-import { useEffect } from "react";
-import { API_URL } from "../config"
+import { API_URL } from "../config";
 
 const Contact = () => {
   const { t } = useTranslation();
-
-  
 
   // ✅ Track form data
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     message: "",
+  });
+
+  // ✅ Settings with safe defaults
+  const [settings, setSettings] = useState({
+    footer: {
+      phone: "+971 50 000 0000",
+      email: "info@services.com",
+      address: "Dubai, UAE",
+    },
   });
 
   // ✅ Handle input change
@@ -44,20 +50,24 @@ const Contact = () => {
     }
   };
 
-      const [settings, setSettings] = useState(null);
-  
-    useEffect(() => {
-      fetch(`${API_URL}/api/settings`)
-        .then((res) => res.json())
-        .then((data) => {
-          if (data.success && data.settings) {
-            setSettings(data.settings);
-          }
-        })
-        .catch((err) => console.error("Error fetching settings:", err));
-    }, []);
-  
-    if (!settings) return null;
+  // ✅ Fetch settings
+  useEffect(() => {
+    fetch(`${API_URL}/api/settings`)
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.success && data.settings) {
+          setSettings((prev) => ({
+            ...prev,
+            ...data.settings,
+            footer: {
+              ...prev.footer,
+              ...data.settings.footer,
+            },
+          }));
+        }
+      })
+      .catch((err) => console.error("❌ Error fetching settings:", err));
+  }, []);
 
   return (
     <section className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center px-6 py-12">
@@ -82,6 +92,7 @@ const Contact = () => {
 
         {/* ✅ Contact Form */}
         <form onSubmit={handleSubmit} className="grid gap-6">
+          {/* Name */}
           <motion.div
             initial={{ opacity: 0, x: -30 }}
             whileInView={{ opacity: 1, x: 0 }}
@@ -102,6 +113,7 @@ const Contact = () => {
             />
           </motion.div>
 
+          {/* Email */}
           <motion.div
             initial={{ opacity: 0, x: 30 }}
             whileInView={{ opacity: 1, x: 0 }}
@@ -122,6 +134,7 @@ const Contact = () => {
             />
           </motion.div>
 
+          {/* Message */}
           <motion.div
             initial={{ opacity: 0, x: -30 }}
             whileInView={{ opacity: 1, x: 0 }}
@@ -142,7 +155,7 @@ const Contact = () => {
             />
           </motion.div>
 
-          {/* Submit Button */}
+          {/* Submit */}
           <motion.button
             type="submit"
             whileHover={{ scale: 1.05 }}
@@ -153,7 +166,7 @@ const Contact = () => {
           </motion.button>
         </form>
 
-        {/* Extra Info */}
+        {/* ✅ Extra Info */}
         <motion.div
           initial={{ opacity: 0, y: 40 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -161,9 +174,9 @@ const Contact = () => {
           viewport={{ once: true }}
           className="mt-10 text-center text-gray-600 dark:text-gray-400"
         >
-  <p>📞 {settings.footer?.phone || t("phone")}</p>
-  <p>📧 {settings.footer?.email || t("mail")}</p>
-  <p>📍 {settings.footer?.address || t("location")}</p>
+          <p>📞 {settings.footer.phone}</p>
+          <p>📧 {settings.footer.email}</p>
+          <p>📍 {settings.footer.address}</p>
         </motion.div>
       </motion.div>
     </section>

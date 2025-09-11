@@ -4,20 +4,37 @@ import { useState, useEffect } from "react";
 import { API_URL } from "../config";
 
 const Footer = () => {
-  const [settings, setSettings] = useState(null);
+  const [settings, setSettings] = useState({
+    companyName: "Bookings",
+    footer: {
+      email: "info@services.com",
+      phone: "+971 50 000 0000",
+      address: "Dubai, UAE",
+    },
+  });
 
   useEffect(() => {
-    fetch(`${API_URL}/api/settings`)
-      .then((res) => res.json())
-      .then((data) => {
+    const fetchSettings = async () => {
+      try {
+        const res = await fetch(`${API_URL}/api/settings`);
+        const data = await res.json();
         if (data.success && data.settings) {
-          setSettings(data.settings);
+          setSettings((prev) => ({
+            ...prev,
+            ...data.settings,
+            footer: {
+              ...prev.footer,
+              ...data.settings.footer,
+            },
+          }));
         }
-      })
-      .catch((err) => console.error("Error fetching settings:", err));
-  }, []);
+      } catch (err) {
+        console.error("❌ Error fetching settings:", err);
+      }
+    };
 
-  if (!settings) return null;
+    fetchSettings();
+  }, []);
 
   return (
     <footer className="bg-gray-600 text-white py-8 px-6">
@@ -47,7 +64,10 @@ const Footer = () => {
             <Link to="/Visa" className="hover:text-yellow-300 transition">
               Visa Services
             </Link>
-            <Link to="/ProServices" className="hover:text-yellow-300 transition">
+            <Link
+              to="/ProServices"
+              className="hover:text-yellow-300 transition"
+            >
               PRO Services
             </Link>
             <Link to="/contact" className="hover:text-yellow-300 transition">
@@ -59,22 +79,18 @@ const Footer = () => {
           <div className="flex flex-col space-y-2 text-center md:text-left">
             <h3 className="font-semibold text-lg mb-2">Contact</h3>
             <a
-              href={`mailto:${settings.footer?.email || ""}`}
+              href={`mailto:${settings.footer?.email}`}
               className="flex items-center gap-2 justify-center md:justify-start hover:text-yellow-300"
             >
-              <Mail size={18} />{" "}
-              {settings.footer?.email || "info@services.com"}
+              <Mail size={18} /> {settings.footer?.email}
             </a>
             <a
-              href={`tel:${settings.footer?.phone || ""}`}
+              href={`tel:${settings.footer?.phone}`}
               className="flex items-center gap-2 justify-center md:justify-start hover:text-yellow-300"
             >
-              <Phone size={18} />{" "}
-              {settings.footer?.phone || "+971 50 000 0000"}
+              <Phone size={18} /> {settings.footer?.phone}
             </a>
-            <p className="text-sm">
-              {settings.footer?.address || "Dubai, UAE"}
-            </p>
+            <p className="text-sm">{settings.footer?.address}</p>
           </div>
         </div>
 
